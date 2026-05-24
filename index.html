@@ -919,10 +919,16 @@
   function loadCounter() {
     const el = document.getElementById('counter-display');
     if (!el) return;
-    if (!SCRIPT_URL || SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzJvdgCiNJ-mycu_XEWyWTzfA1AgOgobt-q6KYq3R2KGBG8PC1yiT_hBlwYEL6RnLZO/exec') {
-      el.textContent = '';
-      return;
-    }
+function loadCounter() {
+  const el = document.getElementById('counter-display');
+  if (!el) return;
+  fetch(SCRIPT_URL + '?action=count')
+    .then(r => r.json())
+    .then(d => {
+      if (d.count > 0) el.textContent = d.count + ' people already locked in';
+    })
+    .catch(() => {});
+}
     fetch(SCRIPT_URL + '?action=count')
       .then(r => r.json())
       .then(d => {
