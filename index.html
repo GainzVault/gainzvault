@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GainzVault — Your Gains, Locked In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --volt: #C8FF00;
+    --black: #0A0A0A;
+    --surface: #141414;
+    --surface2: #1E1E1E;
+    --muted: #888;
+    --white: #F5F5F0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200,255,0,0.08);
+  }
+
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    color: var(--white);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--volt); }
+
+  .nav-cta {
+    background: var(--volt);
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,255,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,255,0,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(200,255,0,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .founding-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(200,255,0,0.3);
+    background: rgba(200,255,0,0.06);
+    padding: 7px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--volt);
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .founding-badge .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--volt);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(56px, 10vw, 120px);
+    line-height: 0.92;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    color: var(--white);
+    animation: fadeUp 0.6s 0.1s ease both;
+    margin-bottom: 8px;
+  }
+
+  .hero h1 .volt { color: var(--volt); }
+
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 22px);
+    color: var(--muted);
+    font-weight: 400;
+    max-width: 480px;
+    line-height: 1.5;
+    margin: 20px auto 0;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-sub strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* FORM */
+  .form-section {
+    position: relative;
+    z-index: 2;
+    margin-top: 48px;
+    width: 100%;
+    max-width: 520px;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .offer-strip {
+    background: rgba(200,255,0,0.08);
+    border: 1px solid rgba(200,255,0,0.2);
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--volt);
+  }
+
+  .email-form {
+    display: flex;
+    gap: 0;
+  }
+
+  .email-form input[type="email"] {
+    flex: 1;
+    background: var(--surface);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-right: none;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    padding: 14px 18px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .email-form input[type="email"]::placeholder { color: #444; }
+
+  .email-form input[type="email"]:focus {
+    border-color: rgba(200,255,0,0.4);
+  }
+
+  .email-form button {
+    background: var(--volt);
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s, transform 0.1s;
+    flex-shrink: 0;
+  }
+
+  .email-form button:hover { opacity: 0.88; }
+  .email-form button:active { transform: scale(0.98); }
+
+  .counter-note {
+    font-size: 13px;
+    color: var(--volt);
+    margin-top: 6px;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    min-height: 20px;
+  }
+
+  .form-note {
+    font-size: 12px;
+    color: #555;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .success-msg {
+    display: none;
+    background: rgba(200,255,0,0.08);
+    border: 1px solid rgba(200,255,0,0.25);
+    padding: 16px 20px;
+    text-align: center;
+  }
+
+  .success-msg .big {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--volt);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .success-msg .small {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* HOW IT WORKS */
+  .section {
+    padding: 100px 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--volt);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 60px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+  }
+
+  .step {
+    background: var(--surface);
+    padding: 32px 28px;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .step:hover { background: var(--surface2); }
+
+  .step-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(200,255,0,0.08);
+    line-height: 1;
+    margin-bottom: 16px;
+    letter-spacing: -2px;
+  }
+
+  .step-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* FEATURES */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2px;
+    margin-top: 48px;
+  }
+
+  .feature {
+    background: var(--surface);
+    padding: 28px;
+    border-left: 3px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .feature:hover {
+    border-left-color: var(--volt);
+    background: var(--surface2);
+  }
+
+  .feature-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .feature-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .feature-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    margin: 0;
+  }
+
+  /* PHONE MOCKUP SECTION */
+  .phone-section {
+    padding: 80px 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+
+  .phone-copy { flex: 1; min-width: 260px; }
+
+  .phone-copy .section-label { margin-bottom: 12px; }
+
+  .phone-copy h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+  }
+
+  .phone-copy p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 360px;
+  }
+
+  .phone-wrap {
+    flex-shrink: 0;
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+  }
+
+  .phone-frame {
+    background: #111;
+    border: 2px solid #2A2A2A;
+    border-radius: 40px;
+    padding: 12px;
+    width: 200px;
+  }
+
+  .phone-screen {
+    background: #0A0A0A;
+    border-radius: 30px;
+    overflow: hidden;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ps-header {
+    background: #111;
+    padding: 16px 14px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #1A1A1A;
+  }
+
+  .ps-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: -0.3px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  .ps-logo .v { color: #C8FF00; }
+
+  .ps-content { padding: 12px; flex: 1; }
+
+  .ps-stat {
+    background: #141414;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .ps-stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: #C8FF00;
+    line-height: 1;
+  }
+
+  .ps-stat-label {
+    font-size: 9px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 3px;
+  }
+
+  .ps-lock {
+    background: #141414;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ps-lock-icon {
+    width: 30px;
+    height: 30px;
+    background: #C8FF00;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .ps-lock-title { font-size: 11px; font-weight: 600; color: #fff; }
+  .ps-lock-sub { font-size: 9px; color: #555; margin-top: 2px; }
+
+  .ps-bar-bg {
+    background: #222;
+    border-radius: 99px;
+    height: 4px;
+    margin-top: 8px;
+  }
+
+  .ps-bar-fill {
+    background: #C8FF00;
+    border-radius: 99px;
+    height: 4px;
+    width: 40%;
+    transition: width 1s ease;
+  }
+
+  .ps-quests {
+    background: #141414;
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+
+  .ps-quest-label {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #C8FF00;
+    margin-bottom: 8px;
+  }
+
+  .ps-quest-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 6px;
+  }
+
+  .ps-quest-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #333;
+    flex-shrink: 0;
+  }
+
+  .ps-quest-dot.done { background: #C8FF00; }
+
+  .ps-quest-text { font-size: 9px; color: #666; }
+  .ps-quest-text.done { text-decoration: line-through; color: #444; }
+
+  /* FOUNDING SECTION */
+  .founding {
+    background: var(--surface);
+    padding: 80px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .founding-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(200,255,0,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .founding-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .founding-inner .section-label { justify-content: center; display: flex; }
+
+  .founding-inner h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin: 16px 0 12px;
+  }
+
+  .founding-inner h2 span { color: var(--volt); }
+
+  .founding-inner p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  .perks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  .perk {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(200,255,0,0.06);
+    border: 1px solid rgba(200,255,0,0.15);
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--white);
+  }
+
+  .perk-check {
+    width: 16px;
+    height: 16px;
+    background: var(--volt);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 9px;
+    color: var(--black);
+    font-weight: 900;
+  }
+
+  /* BOTTOM FORM */
+  .bottom-form-wrap {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  footer .logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: -0.3px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  footer .logo span { color: var(--volt); }
+
+  footer p {
+    font-size: 12px;
+    color: #444;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .phone-section { gap: 40px; justify-content: center; }
+    .phone-copy h2 { font-size: 36px; }
+    .email-form { flex-direction: column; }
+    .email-form input[type="email"] { border-right: 1.5px solid rgba(255,255,255,0.1); border-bottom: none; }
+    .email-form button { padding: 14px; }
+    .phone-wrap { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">GAINZ<span>VAULT</span></a>
+  <a href="#join" class="nav-cta">Join Waitlist</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+
+  <div class="founding-badge">
+    <span class="dot"></span>
+    Waitlist open now
+  </div>
+
+  <h1>YOUR GAINS<br><span class="volt">LOCKED IN.</span></h1>
+
+  <p class="hero-sub">
+    Take a photo daily. <strong>You can't see them.</strong><br>
+    They unlock on your goal date — with a full transformation timelapse.
+  </p>
+
+  <div class="form-section" id="join">
+    <div class="offer-strip">
+      Join the waitlist — get your first month completely free
+    </div>
+
+    <form class="email-form" id="mc-form" novalidate>
+      <input type="email" id="mce-EMAIL" placeholder="your@email.com" required autocomplete="email">
+      <button type="submit">Lock Me In →</button>
+    </form>
+
+    <div class="success-msg" id="success-msg">
+      <div class="big">🔒 You're locked in.</div>
+      <div class="small">Welcome to the founding members list. We'll hit you when GainzVault drops.</div>
+    </div>
+
+    <p class="form-note">No spam. Just a ping when the app drops + your free first month.</p>
+    <p class="counter-note" id="counter-display"></p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="section-label reveal">The rules</div>
+  <div class="section-title reveal">three simple rules.</div>
+
+  <div class="steps reveal">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Snap daily</div>
+      <div class="step-desc">The app aligns your pose with a ghost overlay from your last photo. Same angle. Every time. Front, back, side — all three.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Vault locked</div>
+      <div class="step-desc">You set your goal: 30 days, 3 months, 6 months, 1 year. Photos seal the moment you take them. Not even you can see them.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">The reveal</div>
+      <div class="step-desc">On your goal date, every photo unlocks at once. The app builds your full transformation into a timelapse video — yours to keep and share.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PHONE + COPY -->
+<div class="phone-section">
+  <div class="phone-copy reveal">
+    <div class="section-label">While you wait</div>
+    <h2>The app<br>keeps you<br><span style="color:var(--volt)">showing up.</span></h2>
+    <p>You can't see your photos — but you get AI analytics, streak tracking, daily quests, and XP to keep you grinding toward your reveal.</p>
+  </div>
+  <div class="phone-wrap reveal">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="ps-header">
+          <div class="ps-logo">GAINZ<span class="v">VAULT</span></div>
+          <div style="width:22px;height:22px;background:#1A1A1A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px">🔔</div>
+        </div>
+        <div class="ps-content">
+          <div class="ps-stat">
+            <div class="ps-stat-num">47</div>
+            <div class="ps-stat-label">Day streak 🔥</div>
+            <div class="ps-bar-bg"><div class="ps-bar-fill" id="prog-bar"></div></div>
+          </div>
+          <div class="ps-lock">
+            <div class="ps-lock-icon">🔒</div>
+            <div>
+              <div class="ps-lock-title">47 photos locked</div>
+              <div class="ps-lock-sub">Opens Dec 1, 2025</div>
+            </div>
+          </div>
+          <div class="ps-quests">
+            <div class="ps-quest-label">Today's quests</div>
+            <div class="ps-quest-item"><div class="ps-quest-dot done"></div><div class="ps-quest-text done">Take today's photo</div></div>
+            <div class="ps-quest-item"><div class="ps-quest-dot done"></div><div class="ps-quest-text done">Log your workout</div></div>
+            <div class="ps-quest-item"><div class="ps-quest-dot"></div><div class="ps-quest-text">Hit 7,500 steps</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- FEATURES GRID -->
+<section class="section">
+  <div class="section-label reveal">What you get</div>
+  <div class="section-title reveal">built different.</div>
+  <div class="features reveal">
+    <div class="feature">
+      <span class="feature-icon">👻</span>
+      <div class="feature-title">Pose-lock camera</div>
+      <div class="feature-desc">Ghost overlay from your last photo guides your exact pose — consistent angles every single day, no guessing.</div>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🔒</span>
+      <div class="feature-title">Sealed vault</div>
+      <div class="feature-desc">Photos lock the instant you take them. Nothing unlocks until your goal date. No peeking. That's the whole point.</div>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">AI body analytics</div>
+      <div class="feature-desc">Track estimated body composition, consistency score, and posture changes — all without seeing your actual photos.</div>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🔥</span>
+      <div class="feature-title">Streaks + quests</div>
+      <div class="feature-desc">Daily gym quests, XP, achievements, and streak multipliers. Miss a day and your streak breaks. Simple.</div>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🎬</span>
+      <div class="feature-title">Transformation timelapse</div>
+      <div class="feature-desc">At goal end, every photo plays back in sequence — your full journey compressed into a shareable video.</div>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🔄</span>
+      <div class="feature-title">Multi-angle tracking</div>
+      <div class="feature-desc">Front, back, and side. See your full transformation — not just the angle you feel good in that day.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FOUNDING CTA -->
+<section class="founding" id="founding">
+  <div class="founding-glow"></div>
+  <div class="founding-inner">
+    <div class="section-label">Limited spots</div>
+    <h2>First month<br><span>on us.</span></h2>
+    <p>The first people on this list get a first month completely free when the app launches. We'll email you the moment the app is ready.</p>
+
+    <div class="perks">
+      <div class="perk"><div class="perk-check">✓</div>First month free</div>
+      <div class="perk"><div class="perk-check">✓</div>Early access before public</div>
+      <div class="perk"><div class="perk-check">✓</div>Influence on features</div>
+      <div class="perk"><div class="perk-check">✓</div>No spam, ever</div>
+    </div>
+
+    <div class="bottom-form-wrap">
+      <form class="email-form" id="mc-form-2" novalidate>
+        <input type="email" id="mce-EMAIL-2" placeholder="your@email.com" required autocomplete="email">
+        <button type="submit">Lock Me In →</button>
+      </form>
+      <div class="success-msg" id="success-msg-2">
+        <div class="big">🔒 You're locked in.</div>
+        <div class="small">Welcome to the founding members list.</div>
+      </div>
+      <p class="form-note">No spam. Just one email when the app drops.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">GAINZ<span>VAULT</span></div>
+  <p>Your gains, locked in. &nbsp;·&nbsp; Coming soon. &nbsp;·&nbsp; © 2025 GainzVault</p>
+</footer>
+
+<script>
+  // ============================================================
+  // STEP 1: Paste your Google Apps Script Web App URL here
+  // (see setup instructions below)
+  // ============================================================
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJvdgCiNJ-mycu_XEWyWTzfA1AgOgobt-q6KYq3R2KGBG8PC1yiT_hBlwYEL6RnLZO/exec';
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Progress bar animation
+  const progBar = document.getElementById('prog-bar');
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { setTimeout(() => { progBar.style.width = '78%'; }, 300); barObserver.unobserve(e.target); }
+    });
+  }, { threshold: 0.5 });
+  if (progBar) barObserver.observe(progBar.parentElement);
+
+  // Load + display counter
+  function loadCounter() {
+    const el = document.getElementById('counter-display');
+    if (!el) return;
+    if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
+      el.textContent = '';
+      return;
+    }
+    fetch(SCRIPT_URL + '?action=count')
+      .then(r => r.json())
+      .then(d => {
+        if (d.count > 0) el.textContent = d.count + ' people already locked in';
+      })
+      .catch(() => {});
+  }
+  loadCounter();
+
+  // Submit email to Google Sheet
+  function submitEmail(email, formEl, successId) {
+    const success = document.getElementById(successId);
+    const btn = formEl.querySelector('button');
+    btn.textContent = 'Locking in...';
+    btn.disabled = true;
+
+    if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
+      // Demo mode — no backend yet
+      setTimeout(() => {
+        formEl.style.display = 'none';
+        success.style.display = 'block';
+        loadCounter();
+      }, 600);
+      return;
+    }
+
+    fetch(SCRIPT_URL + '?action=submit&email=' + encodeURIComponent(email))
+      .then(r => r.json())
+      .then(d => {
+        formEl.style.display = 'none';
+        success.style.display = 'block';
+        loadCounter();
+      })
+      .catch(() => {
+        // Show success anyway — don't punish the user for a network blip
+        formEl.style.display = 'none';
+        success.style.display = 'block';
+      });
+  }
+
+  function handleForm(formId, successId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const emailInput = form.querySelector('input[type="email"]');
+      const email = emailInput.value.trim();
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        emailInput.style.borderColor = '#FF4D4D';
+        emailInput.focus();
+        return;
+      }
+      emailInput.style.borderColor = '';
+      submitEmail(email, form, successId);
+    });
+  }
+
+  handleForm('mc-form', 'success-msg');
+  handleForm('mc-form-2', 'success-msg-2');
+</script>
+</body>
+</html>
